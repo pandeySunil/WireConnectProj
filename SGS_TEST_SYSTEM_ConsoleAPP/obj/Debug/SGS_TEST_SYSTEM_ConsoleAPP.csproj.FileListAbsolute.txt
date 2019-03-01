@@ -1,0 +1,14 @@
+C:\Users\Sunil Pandey\source\repos\SGS_TEST_SYSTEM_ConsoleAPP\SGS_TEST_SYSTEM_ConsoleAPP\bin\Debug\SGS_TEST_SYSTEM_ConsoleAPP.exe.config
+C:\Users\Sunil Pandey\source\repos\SGS_TEST_SYSTEM_ConsoleAPP\SGS_TEST_SYSTEM_ConsoleAPP\bin\Debug\SGS_TEST_SYSTEM_ConsoleAPP.exe
+C:\Users\Sunil Pandey\source\repos\SGS_TEST_SYSTEM_ConsoleAPP\SGS_TEST_SYSTEM_ConsoleAPP\bin\Debug\SGS_TEST_SYSTEM_ConsoleAPP.pdb
+C:\Users\Sunil Pandey\source\repos\SGS_TEST_SYSTEM_ConsoleAPP\SGS_TEST_SYSTEM_ConsoleAPP\obj\Debug\SGS_TEST_SYSTEM_ConsoleAPP.csprojAssemblyReference.cache
+C:\Users\Sunil Pandey\source\repos\SGS_TEST_SYSTEM_ConsoleAPP\SGS_TEST_SYSTEM_ConsoleAPP\obj\Debug\SGS_TEST_SYSTEM_ConsoleAPP.csproj.CoreCompileInputs.cache
+C:\Users\Sunil Pandey\source\repos\SGS_TEST_SYSTEM_ConsoleAPP\SGS_TEST_SYSTEM_ConsoleAPP\obj\Debug\SGS_TEST_SYSTEM_ConsoleAPP.exe
+C:\Users\Sunil Pandey\source\repos\SGS_TEST_SYSTEM_ConsoleAPP\SGS_TEST_SYSTEM_ConsoleAPP\obj\Debug\SGS_TEST_SYSTEM_ConsoleAPP.pdb
+C:\Users\Sunil.Pandey\Desktop\SGS_TEST_SYSTEM_ConsoleAPP\SGS_TEST_SYSTEM_ConsoleAPP\bin\Debug\SGS_TEST_SYSTEM_ConsoleAPP.exe.config
+C:\Users\Sunil.Pandey\Desktop\SGS_TEST_SYSTEM_ConsoleAPP\SGS_TEST_SYSTEM_ConsoleAPP\bin\Debug\SGS_TEST_SYSTEM_ConsoleAPP.exe
+C:\Users\Sunil.Pandey\Desktop\SGS_TEST_SYSTEM_ConsoleAPP\SGS_TEST_SYSTEM_ConsoleAPP\bin\Debug\SGS_TEST_SYSTEM_ConsoleAPP.pdb
+C:\Users\Sunil.Pandey\Desktop\SGS_TEST_SYSTEM_ConsoleAPP\SGS_TEST_SYSTEM_ConsoleAPP\obj\Debug\SGS_TEST_SYSTEM_ConsoleAPP.csproj.CoreCompileInputs.cache
+C:\Users\Sunil.Pandey\Desktop\SGS_TEST_SYSTEM_ConsoleAPP\SGS_TEST_SYSTEM_ConsoleAPP\obj\Debug\SGS_TEST_SYSTEM_ConsoleAPP.exe
+C:\Users\Sunil.Pandey\Desktop\SGS_TEST_SYSTEM_ConsoleAPP\SGS_TEST_SYSTEM_ConsoleAPP\obj\Debug\SGS_TEST_SYSTEM_ConsoleAPP.pdb
+C:\Users\Sunil.Pandey\Desktop\SGS_TEST_SYSTEM_ConsoleAPP\SGS_TEST_SYSTEM_ConsoleAPP\obj\Debug\SGS_TEST_SYSTEM_ConsoleAPP.csprojAssemblyReference.cache
