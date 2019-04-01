@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Excel = Microsoft.Office.Interop.Excel;
+using System.IO.Ports;
 
 namespace SGS_TEST_SYSTEM_ConsoleAPP
 {
 
     class Program
     {
+        public static SerialPort SerialPort1;
         public static int rowCount;
         public static int colCount;
         public static Dictionary<string, string> SheetReturValues = new Dictionary<string, string>();
@@ -34,31 +36,57 @@ namespace SGS_TEST_SYSTEM_ConsoleAPP
             //    SheetReturValues["i"] = Convert.ToString(Convert.ToInt32(SheetReturValues["i"])+1);
             //}
             //  Console.ReadLine();Convert
+            SerialPort1 = ArdiunoConnection.IntializeAudiun();
+            SerialPort1.Open();
             Excel.Application xlApp = new Excel.Application();
-            Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(@"C:\Users\Sunil.Pandey\Desktop\CABLETESTSHEET1\CABLETESTSHEET1\sheet1.xlsx");
+            Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(@"C:\Users\Akshay\Desktop\sheet3.xlsx");
             Excel._Worksheet xlWorksheet = xlWorkbook.Sheets[1];
             Excel.Range xlRange = xlWorksheet.UsedRange;
-            for (int i = 2; i < 12; i++)
+            int Count = 1;
+            for (int i = 2; i < 20; i++)
             {
+                Console.WriteLine(Count);
                 if (xlRange.Cells[i, 2] != null && xlRange.Cells[i, 2].Value2 != null)
                 {
-                    
+
                     trayCode = xlRange.Cells[i, 2].Value2.ToString().Trim('/');
                     string temp1 = xlRange.Cells[i, 3].Value2.ToString().Trim('/');
                     string temp2 = xlRange.Cells[i, 5].Value2.ToString().Trim('/');
+                    Console.WriteLine("Celli,5" + temp2);
                     ledOnCode = trayCode + temp1;
                     ledOffCode = trayCode + temp2;
                     switchCode = xlRange.Cells[i, 4].Value2.ToString().Trim('/');
+                    Console.WriteLine("SwitchCode-Sheet: " + switchCode);
+                    SerialPort1.Write(ledOnCode);
                     sWInput = SwitchPress();
-                    
-                    Console.WriteLine(switchCode);
+
+                    Console.WriteLine("SwitchCode-Ardiuno: " + sWInput);
+
                     Console.WriteLine(ledOnCode);
-                    if (sWInput == switchCode)
+
+                    var t = switchCode + "\r";
+
+                    var falg = string.Equals(sWInput, t, StringComparison.OrdinalIgnoreCase);
+                    if (falg)
                     {
-                        Console.WriteLine(ledOffCode);
+                        SerialPort1.Write(ledOffCode);
+                        switchCode = xlRange.Cells[i, 6].Value2.ToString().Trim('/');
+                        sWInput = SwitchPress();
+                        t = switchCode + "\r";
+                        falg = string.Equals(sWInput, t, StringComparison.OrdinalIgnoreCase);
+                        if (falg)
+                        {
+                            i = i + 1;
+                            temp2 = xlRange.Cells[i, 5].Value2.ToString().Trim('/');
+                            ledOnCode = trayCode + temp1;
+                            Console.WriteLine(ledOnCode);
+                            SerialPort1.Write(ledOnCode);
+                        }
+
+
                     }
 
-
+                    Count++;
                 }
             }
         }
@@ -155,7 +183,11 @@ namespace SGS_TEST_SYSTEM_ConsoleAPP
             while (Flag)
             {
 
-                var readText = Console.ReadLine();
+                //var readText = Console.ReadLine();
+
+                var readText = SerialPort1.ReadLine();
+
+
                 if (readText != "")
                 {
                     return readText;
