@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO.Ports;
 using Excel = Microsoft.Office.Interop.Excel;
+using System.Configuration;
 
 namespace SGS_DEPLOYMENTPROJECT
 {
@@ -18,8 +19,8 @@ namespace SGS_DEPLOYMENTPROJECT
 
             try
             {
-
-                mySerialPort = new SerialPort("COM5");
+                var  PortName = ConfigurationManager.AppSettings.Get("portName");
+                mySerialPort = new SerialPort(PortName);
                 mySerialPort.BaudRate = 9600;
                 mySerialPort.Parity = Parity.None;
                 mySerialPort.StopBits = StopBits.One;

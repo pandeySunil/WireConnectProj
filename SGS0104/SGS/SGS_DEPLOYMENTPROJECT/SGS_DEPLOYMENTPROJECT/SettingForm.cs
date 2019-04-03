@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace SGS_DEPLOYMENTPROJECT
 {
@@ -26,7 +27,7 @@ namespace SGS_DEPLOYMENTPROJECT
 
             textBoxPort.Text = PortName;
             textBoxStationName.Text = stationName;
-           // textBoxPort.ReadOnly = true;
+            textBoxPort.ReadOnly = true;
             textBoxStationName.ReadOnly = true;
 
 
@@ -34,28 +35,88 @@ namespace SGS_DEPLOYMENTPROJECT
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
-            textBoxStationName.ReadOnly = false;
+            if (textBoxStationName.ReadOnly)
+            {
+                DialogResult dialogResult = MessageBox.Show("Do You Want To Change StatioName (Enter Value In Text Box and Click)", "Stationn Name", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    textBoxStationName.ReadOnly = false;
+                }
+                else if (dialogResult == DialogResult.No)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                Configuration configuration = ConfigurationManager.
+                    OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
+                configuration.AppSettings.Settings["stationName"].Value = textBoxStationName.Text;
+                configuration.Save();
 
-            MessageBox.Show("Enter The New Name Of Station In The TextBox");
-            
-            ConfigurationManager.AppSettings.Set("stationName", textBoxStationName.Text);
+                ConfigurationManager.RefreshSection("appSettings");
+                MessageBox.Show(ConfigurationManager.AppSettings.Get("stationName"));
+                textBoxStationName.ReadOnly = true;
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-           // textBoxPort.ReadOnly = false;
-            MessageBox.Show("Enter New Port In The Text Box");
-            //ConfigurationManager.AppSettings.Set("portName", textBoxPort.Text);
-            Configuration configuration = ConfigurationManager.
-        OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
-            configuration.AppSettings.Settings["portName"].Value = textBoxPort.Text;
-            configuration.Save();
+            if (textBoxPort.ReadOnly)
+            {
+                DialogResult dialogResult = MessageBox.Show("Do You Want To Change Port Name (Enter Value In Text Box and Click)", "Port Name", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    textBoxPort.ReadOnly = false;
+                }
+                else if (dialogResult == DialogResult.No)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                Configuration configuration = ConfigurationManager.
+                    OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
+                configuration.AppSettings.Settings["portName"].Value = textBoxPort.Text;
+                configuration.Save();
 
-            ConfigurationManager.RefreshSection("appSettings");
-            MessageBox.Show(ConfigurationManager.AppSettings.Get("portName"));
+                ConfigurationManager.RefreshSection("appSettings");
+                MessageBox.Show(ConfigurationManager.AppSettings.Get("portName"));
+                textBoxPort.ReadOnly = true;
+            }
 
 
+        }
+
+        private void SettingForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Process proc = new Process();
+
+            try
+            {
+                string batDir = string.Format(@"C:\Program Files (x86)\TeamViewer\");
+                proc.StartInfo.WorkingDirectory = batDir;
+                proc.StartInfo.FileName = "TeamViewer.exe";
+                proc.StartInfo.CreateNoWindow = false;
+                proc.Start();
+                proc.WaitForExit();
+                proc.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace.ToString());
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            new CreateUser().Show();
         }
     }
 }

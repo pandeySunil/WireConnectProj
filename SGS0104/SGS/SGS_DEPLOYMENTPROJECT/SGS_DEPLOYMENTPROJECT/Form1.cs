@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -16,6 +17,7 @@ namespace SGS_DEPLOYMENTPROJECT
 {
     public partial class Form1 : Form
     {
+        public bool backgroudThreadSleepFlag;
         BusinessLogic businessLogic { get; set; }
         public static SerialPort SerialPort;
         Microsoft.Office.Interop.Excel.Range xlRange;
@@ -34,6 +36,7 @@ namespace SGS_DEPLOYMENTPROJECT
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            lableLoggedInUser.Text = "Hello, "+Helper.LoggedInUserName;
             if (Helper.ExcelSheetName == "")
             {
 
@@ -44,13 +47,13 @@ namespace SGS_DEPLOYMENTPROJECT
             BackGroundThread = new Thread(() => Navigation());
             BackGroundThread.IsBackground = true;
             //SerialPort = ArdiunoConnection.IntializeAudiun();
-            textBoxDevelopersArea.Text += "Opening Serial Port\\n";
+            //textBoxDevelopersArea.Text += "Opening Serial Port\\n";
             //SerialPort.Open();
             businessLogic = new BusinessLogic();
             //Helper.ExcelSheetName = "";
            
             
-            textBoxDevelopersArea.Text += "Sheet Intiallized\\n";
+           // textBoxDevelopersArea.Text += "Sheet Intiallized\\n";
             // pictureBox.Dock = DockStyle.Fill;
             
 
@@ -80,6 +83,7 @@ namespace SGS_DEPLOYMENTPROJECT
             {
                 BackGroundThread.Abort();
                 Application.Exit();
+                LogOut();
             }
             else if (dialogResult == DialogResult.No)
             {
@@ -96,7 +100,7 @@ namespace SGS_DEPLOYMENTPROJECT
         {
            
             
-            textBoxDevelopersArea.Text += "Navigation Thread is Stated\\n";
+           // textBoxDevelopersArea.Text += "Navigation Thread is Stated\\n";
             if (Helper.ExcelSheetName != "")
             {
                 businessLogic.InitializeExcel();
@@ -119,18 +123,18 @@ namespace SGS_DEPLOYMENTPROJECT
             TextBox.CheckForIllegalCrossThreadCalls = false;
             PictureBox.CheckForIllegalCrossThreadCalls = false;
             SerialPort = ArdiunoConnection.IntializeAudiun();
-            textBoxDevelopersArea.Text += "Opening Serial Port\\n";
+           // textBoxDevelopersArea.Text += "Opening Serial Port\\n";
             SerialPort.Open();
             businessLogic = new BusinessLogic();
             businessLogic.InitializeExcel();
             xlRange = businessLogic.InitializeExcel();
-            textBoxDevelopersArea.Text += "Sheet Intiallized\\n";
+           // textBoxDevelopersArea.Text += "Sheet Intiallized\\n";
 
             int Count = 1;
 
             for (int i = 2; i < 20; i++)
             {
-                textBoxDevelopersArea.Text += "Next Iteration \\n";
+               // textBoxDevelopersArea.Text += "Next Iteration \\n";
                 Console.WriteLine(Count);
                 if (xlRange.Cells[i, 2] != null && xlRange.Cells[i, 2].Value2 != null)
                 {
@@ -145,9 +149,9 @@ namespace SGS_DEPLOYMENTPROJECT
                     Console.WriteLine("SwitchCode-Sheet: " + switchCode);
                     SerialPort.Write(ledOnCode);
                     sWInput = SwitchPress();
-                    textBoxDevelopersArea.Text += "SwitchCode - Ardiuno: " + sWInput + "\\n";
+                   // textBoxDevelopersArea.Text += "SwitchCode - Ardiuno: " + sWInput + "\\n";
                     Console.WriteLine("SwitchCode-Ardiuno: " + sWInput);
-                    textBoxDevelopersArea.Text += "SwitchCode - Ardiuno: " + sWInput + "\\n";
+                    //textBoxDevelopersArea.Text += "SwitchCode - Ardiuno: " + sWInput + "\\n";
                     Console.WriteLine(ledOnCode);
 
                     var t = switchCode + "\r";
@@ -165,11 +169,11 @@ namespace SGS_DEPLOYMENTPROJECT
 
                             temp2 = xlRange.Cells[i, 5].Value2.ToString().Trim('/');
                             ledOnCode = trayCode + temp1;
-                            textBoxDevelopersArea.Text += "ledOnCode: " + ledOnCode + "\\n";
+                           // textBoxDevelopersArea.Text += "ledOnCode: " + ledOnCode + "\\n";
                             Console.WriteLine(ledOnCode);
                             SerialPort.Write(ledOnCode);
                             textBoxDescription.Text = xlRange.Cells[i, 7].Value2.ToString().Trim('/');
-                            textBoxDevelopersArea.Text += "DesMag: " + xlRange.Cells[i, 7].Value2.ToString().Trim('/') + "\\n";
+                           // textBoxDevelopersArea.Text += "DesMag: " + xlRange.Cells[i, 7].Value2.ToString().Trim('/') + "\\n";
                             textBoxPullConnection.Text = xlRange.Cells[i, 8].Value2.ToString().Trim('/');
 
                             imgUrl = xlRange.Cells[i, 9].Value2.ToString().Trim('/');
@@ -181,6 +185,11 @@ namespace SGS_DEPLOYMENTPROJECT
                     }
 
                     Count++;
+                    if (backgroudThreadSleepFlag) {
+                        while (true) {
+
+                        }
+                    }
                 }
             }
             TimeSpan ts = stopWatch.Elapsed;
@@ -250,6 +259,63 @@ namespace SGS_DEPLOYMENTPROJECT
             Form1 frm = new Form1();
             frm.Show();
 
+        }
+        private void  LogOut() {
+
+            SQLConnectionSetUp conObj = new SQLConnectionSetUp();
+            var Con = conObj.GetConn();
+            try
+            {
+
+                Con.Open();
+                SqlCommand cmd = new SqlCommand("LogOut", Con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@UserName", Helper.LoggedInUserName);
+
+                cmd.ExecuteNonQuery();
+
+                }
+
+            catch (Exception Ex)
+            {
+
+            }
+            finally { Con.Close(); }
+
+            
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox5_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            backgroudThreadSleepFlag = true;
+            DialogResult dialogResult = MessageBox.Show("Setting Will Terminate The Current Cycle", "Setting", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                BackGroundThread.Abort();
+                new SettingForm().Show();
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                backgroudThreadSleepFlag = false;
+                return;
+            }
+            
         }
     }
 }

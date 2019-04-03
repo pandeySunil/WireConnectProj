@@ -32,7 +32,6 @@
             this.textBoxPassword = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.button2 = new System.Windows.Forms.Button();
             this.lblError = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -43,6 +42,7 @@
             this.textBoxUsername.Name = "textBoxUsername";
             this.textBoxUsername.Size = new System.Drawing.Size(83, 20);
             this.textBoxUsername.TabIndex = 0;
+            this.textBoxUsername.TextChanged += new System.EventHandler(this.textBoxUsername_TextChanged);
             // 
             // textBoxPassword
             // 
@@ -69,17 +69,6 @@
             this.label5.TabIndex = 4;
             this.label5.Text = "Password";
             // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(388, 210);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(54, 17);
-            this.radioButton2.TabIndex = 5;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Admin";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            // 
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(388, 233);
@@ -103,7 +92,6 @@
             this.ClientSize = new System.Drawing.Size(850, 485);
             this.Controls.Add(this.lblError);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.radioButton2);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textBoxPassword);
@@ -127,7 +115,6 @@
         private System.Windows.Forms.TextBox textBoxPassword;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label lblError;
     }
