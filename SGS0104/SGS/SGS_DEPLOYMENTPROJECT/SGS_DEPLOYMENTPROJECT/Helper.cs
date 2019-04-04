@@ -12,5 +12,7 @@ namespace SGS_DEPLOYMENTPROJECT
         public static string SerialPortName { get; set; }
         public static string LoggedInUserName { get; set; }
         public static bool LoggerInUserIsAdmin { get; set; }
+
     }
+
 }

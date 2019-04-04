@@ -29,6 +29,8 @@ namespace SGS_DEPLOYMENTPROJECT
             textBoxStationName.Text = stationName;
             textBoxPort.ReadOnly = true;
             textBoxStationName.ReadOnly = true;
+            FormBorderStyle = FormBorderStyle.None;
+            WindowState = FormWindowState.Maximized;
 
 
         }

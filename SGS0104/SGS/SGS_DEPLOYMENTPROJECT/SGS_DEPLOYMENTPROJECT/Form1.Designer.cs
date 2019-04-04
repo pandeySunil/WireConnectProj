@@ -53,6 +53,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
+            
             // 
             // pictureBox
             // 
@@ -144,11 +145,12 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(229, 12);
+            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button5.Location = new System.Drawing.Point(903, 7);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.Size = new System.Drawing.Size(115, 30);
             this.button5.TabIndex = 8;
-            this.button5.Text = "LogOut";
+            this.button5.Text = "Logout";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
@@ -252,6 +254,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1210, 514);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox5);

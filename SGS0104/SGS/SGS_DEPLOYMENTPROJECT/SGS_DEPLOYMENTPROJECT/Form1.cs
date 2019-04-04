@@ -36,6 +36,8 @@ namespace SGS_DEPLOYMENTPROJECT
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            FormBorderStyle = FormBorderStyle.None;
+            WindowState = FormWindowState.Maximized;
             lableLoggedInUser.Text = "Hello, "+Helper.LoggedInUserName;
             if (Helper.ExcelSheetName == "")
             {
@@ -299,6 +301,20 @@ namespace SGS_DEPLOYMENTPROJECT
         private void textBox5_TextChanged(object sender, EventArgs e)
         {
 
+        }
+        private void OnApplicationExit(object sender, EventArgs e)
+        {
+            
+           
+
+            try
+            {
+                MessageBox.Show("Closeing Application ");
+                LogOut();
+
+
+            }
+            catch { }
         }
 
         private void button1_Click(object sender, EventArgs e)

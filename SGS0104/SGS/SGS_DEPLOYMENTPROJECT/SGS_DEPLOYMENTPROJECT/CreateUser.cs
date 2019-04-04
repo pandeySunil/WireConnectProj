@@ -16,6 +16,8 @@ namespace SGS_DEPLOYMENTPROJECT
         public CreateUser()
         {
             InitializeComponent();
+            FormBorderStyle = FormBorderStyle.None;
+            WindowState = FormWindowState.Maximized;
         }
 
         private void button2_Click(object sender, EventArgs e)

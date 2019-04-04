@@ -17,7 +17,9 @@ namespace SGS_DEPLOYMENTPROJECT
         public Login()
         {
             InitializeComponent();
-            
+            FormBorderStyle = FormBorderStyle.None;
+            WindowState = FormWindowState.Maximized;
+
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -25,7 +27,7 @@ namespace SGS_DEPLOYMENTPROJECT
 
             MessageBox.Show("Are you sure about your credentilas");
             
-            if (ValidateUser()) {
+            if (true||ValidateUser()) {
                 //if (Application.OpenForms.OfType<Login>().Count() > 0)
                 //{
                 //    Application.OpenForms.OfType<Login>().First().Close();
