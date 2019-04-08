@@ -16,8 +16,11 @@ namespace SGS_DEPLOYMENTPROJECT
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-           // Application.Run(new Login());
-            Application.Run(new Login());
+            // Application.Run(new Login());
+            Helper.form1 = new Form1();
+
+           // Helper.iOCheck = new IOCheck();
+            Application.Run(Helper.form1);
         }
 
     }

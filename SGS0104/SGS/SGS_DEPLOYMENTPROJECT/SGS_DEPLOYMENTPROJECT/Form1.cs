@@ -36,9 +36,30 @@ namespace SGS_DEPLOYMENTPROJECT
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            textBox2.Text = "PRTNO";
+            textBox1.Text = "00";
+            textBox3.Text = "00";
+            textBox5.Text = "00";
+            textBox2.ForeColor = System.Drawing.Color.GreenYellow;
+            textBox1.ForeColor = System.Drawing.Color.GreenYellow;
+            textBox3.ForeColor = System.Drawing.Color.GreenYellow;
+            textBox5.ForeColor = System.Drawing.Color.GreenYellow;
+            labelTime.Text = DateTime.Now.ToString("HH:mm:ss");
+            labelDate.Text = DateTime.Now.ToShortDateString();
+            btnOn.BackColor = System.Drawing.Color.Red;
+            btnOff.BackColor = System.Drawing.Color.Red;
+            pictureBox.BackColor = System.Drawing.Color.AliceBlue;
+            textToTal.BackColor = System.Drawing.Color.Yellow;
+            textTackTime.BackColor = System.Drawing.Color.Yellow;
+
+            btnStart.BackColor = System.Drawing.Color.Green;
+            btnBck.BackColor = System.Drawing.Color.Yellow;
+            btnStop.BackColor = System.Drawing.Color.Red;
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
+
             lableLoggedInUser.Text = "Hello, "+Helper.LoggedInUserName;
+            
             if (Helper.ExcelSheetName == "")
             {
 
@@ -199,7 +220,7 @@ namespace SGS_DEPLOYMENTPROJECT
             string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
                         ts.Hours, ts.Minutes, ts.Seconds,
                         ts.Milliseconds / 10);
-            tackTime.Text = elapsedTime;
+            textTackTime.Text = elapsedTime;
 
         }
 
@@ -332,6 +353,16 @@ namespace SGS_DEPLOYMENTPROJECT
                 return;
             }
             
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            labelTime.Text = DateTime.Now.ToString("HH:mm:ss");
+
         }
     }
 }
