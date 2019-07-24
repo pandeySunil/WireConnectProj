@@ -23,7 +23,7 @@ namespace SGS_DEPLOYMENTPROJECT
         public Excel.Range InitializeExcel() {
 
             Excel.Application xlApp = new Excel.Application();
-            Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(Helper.ExcelSheetName);
+            Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(Helper.assetFolderPath+"\\Sheet.xlsx");
             Excel._Worksheet xlWorksheet = xlWorkbook.Sheets[1];
             Excel.Range xlRange = xlWorksheet.UsedRange;
             return xlRange;

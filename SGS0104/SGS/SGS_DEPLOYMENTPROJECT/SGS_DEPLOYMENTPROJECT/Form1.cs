@@ -21,7 +21,8 @@ namespace SGS_DEPLOYMENTPROJECT
         public bool imageBlickFalg = true;
         BusinessLogic businessLogic { get; set; }
         public static SerialPort SerialPort;
-        public  ImageGetter ImageGetter = new ImageGetter();
+        public ImageGetter ImageGetter;
+        //= new ImageGetter();
         Microsoft.Office.Interop.Excel.Range xlRange;
         public static int loopCount = 1;
         public static string ledOnCode;
@@ -68,6 +69,10 @@ namespace SGS_DEPLOYMENTPROJECT
                 MessageBox.Show("Please Select  Sheet To Be Loaded");
             }
             //SelectExcelFile();
+           // SetFolderPath();
+            if (Helper.assetFolderPath ==null|| Helper.assetFolderPath == "") {
+                SetFolderPath();
+            }
            var  ImageLoadThread = new Thread(() => LoadImage());
             ImageLoadThread.IsBackground = true;
             BackGroundThread = new Thread(() => Navigation());
@@ -81,8 +86,11 @@ namespace SGS_DEPLOYMENTPROJECT
 
             // textBoxDevelopersArea.Text += "Sheet Intiallized\\n";
             // pictureBox.Dock = DockStyle.Fill;
-
-            ImageLoadThread.Start();
+            if (Helper.assetFolderPath == null || Helper.assetFolderPath == "")
+            {
+               // ImageLoadThread.Start();
+            }
+            
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -128,7 +136,7 @@ namespace SGS_DEPLOYMENTPROJECT
            
             
            // textBoxDevelopersArea.Text += "Navigation Thread is Stated\\n";
-            if (Helper.ExcelSheetName != "")
+            if (Helper.ExcelSheetName != ""||true)
             {
                 businessLogic.InitializeExcel();
                 xlRange = businessLogic.InitializeExcel();
@@ -149,9 +157,9 @@ namespace SGS_DEPLOYMENTPROJECT
             
             TextBox.CheckForIllegalCrossThreadCalls = false;
             PictureBox.CheckForIllegalCrossThreadCalls = false;
-            SerialPort = ArdiunoConnection.IntializeAudiun();
+           // SerialPort = ArdiunoConnection.IntializeAudiun();
            // textBoxDevelopersArea.Text += "Opening Serial Port\\n";
-            SerialPort.Open();
+            //SerialPort.Open();
             businessLogic = new BusinessLogic();
             businessLogic.InitializeExcel();
             xlRange = businessLogic.InitializeExcel();
@@ -172,9 +180,10 @@ namespace SGS_DEPLOYMENTPROJECT
                     Console.WriteLine("Celli,5" + temp2);
                     ledOnCode = trayCode + temp1;
                     ledOffCode = trayCode + temp2;
-                    switchCode = xlRange.Cells[i, 4].Value2.ToString().Trim('/');
+                    //switchCode = xlRange.Cells[i, 4].Value2.ToString().Trim('/');\
+                    switchCode = "SW1";
                     Console.WriteLine("SwitchCode-Sheet: " + switchCode);
-                    SerialPort.Write(ledOnCode);
+                    //SerialPort.Write(ledOnCode);
                     sWInput = SwitchPress();
                    // textBoxDevelopersArea.Text += "SwitchCode - Ardiuno: " + sWInput + "\\n";
                     Console.WriteLine("SwitchCode-Ardiuno: " + sWInput);
@@ -186,7 +195,7 @@ namespace SGS_DEPLOYMENTPROJECT
                     var falg = string.Equals(sWInput, t, StringComparison.OrdinalIgnoreCase);
                     if (falg)
                     {
-                        SerialPort.Write(ledOffCode);
+                        //SerialPort.Write(ledOffCode);
                         switchCode = xlRange.Cells[i, 6].Value2.ToString().Trim('/');
                         sWInput = SwitchPress();
                         t = switchCode + "\r";
@@ -204,26 +213,26 @@ namespace SGS_DEPLOYMENTPROJECT
                             textBoxPullConnection.Text = xlRange.Cells[i, 8].Value2.ToString().Trim('/');
 
                             imgUrl = xlRange.Cells[i, 9].Value2.ToString().Trim('/');
-                            Bitmap image = new Bitmap("C:\\Users\\Akshay\\Desktop\\SGS\\SGS_MEDIA\\" + imgUrl);
+                          //  Bitmap image = new Bitmap("C:\\Users\\Akshay\\Desktop\\SGS\\SGS_MEDIA\\" + imgUrl);
                            // pictureBox.Image = (Image)image;
-                            var originalImage = (Image)ImageGetter.GetBitmap(0);
-                            var modifiedImage = (Image)ImageGetter.GetBitmap(1);
-                            bool toggleFlag = false;
-                            var imageId = 1;
-                            while (imageBlickFalg)
-                            {
-                                if (toggleFlag)
-                                {
-                                    pictureBox.Image = originalImage;
-                                    toggleFlag = false;
-                                }
-                                else
-                                {
-                                    pictureBox.Image = modifiedImage;
-                                    toggleFlag = true;
-                                }
-                                Thread.Sleep(250);
-                            }
+                            //var originalImage = (Image)ImageGetter.GetBitmap(0);
+                            //var modifiedImage = (Image)ImageGetter.GetBitmap(1);
+                            //bool toggleFlag = false;
+                            //var imageId = 1;
+                            //while (imageBlickFalg)
+                            //{
+                            //    if (toggleFlag)
+                            //    {
+                            //        pictureBox.Image = originalImage;
+                            //        toggleFlag = false;
+                            //    }
+                            //    else
+                            //    {
+                            //        pictureBox.Image = modifiedImage;
+                            //        toggleFlag = true;
+                            //    }
+                            //    Thread.Sleep(250);
+                            //}
                         }
 
                     }
@@ -257,14 +266,14 @@ namespace SGS_DEPLOYMENTPROJECT
             while (Flag)
             {
 
-                //var readText = Console.ReadLine();
+                var readText = Console.ReadLine();
 
-                var readText = SerialPort.ReadLine();
+                //var readText = SerialPort.ReadLine();
 
 
                 if (readText != "")
                 {
-                    return readText;
+                   return readText;
 
                 }
 
@@ -383,6 +392,24 @@ namespace SGS_DEPLOYMENTPROJECT
         private void timer1_Tick(object sender, EventArgs e)
         {
             labelTime.Text = DateTime.Now.ToString("HH:mm:ss");
+
+        }
+        private void SetFolderPath() {
+
+            Helper.assetFolderPath = "";
+            using (var fldrDlg = new FolderBrowserDialog())
+            {
+                //fldrDlg.Filter = "Png Files (*.png)|*.png";
+                //fldrDlg.Filter = "Excel Files (*.xls, *.xlsx)|*.xls;*.xlsx|CSV Files (*.csv)|*.csv"
+
+                if (fldrDlg.ShowDialog() == DialogResult.OK)
+                {
+                    Helper.assetFolderPath =  fldrDlg.SelectedPath;
+                    //fldrDlg.SelectedPath -- your result
+                }
+            }
+
+            MessageBox.Show(Helper.assetFolderPath);
 
         }
         public void LoadImage() {

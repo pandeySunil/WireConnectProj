@@ -22,7 +22,7 @@ namespace SGS_DEPLOYMENTPROJECT
             try
             {
 
-                using (StreamReader r = new StreamReader(@"C:\Users\Sunil.Pandey\Desktop\CustmImageEditor\CustmImageEditor\ImageConfig.json"))
+                using (StreamReader r = new StreamReader(Helper.assetFolderPath+"\\BaseImageConfig.json"))
                 {
                     Console.WriteLine("Reading File..");
                     string json = r.ReadToEnd();
@@ -72,10 +72,9 @@ namespace SGS_DEPLOYMENTPROJECT
 
         }
         public Bitmap GetBitmap(int shapepointer) {
-            filePath = "C:\\Users\\Sunil.Pandey\\Desktop\\Capture2.PNG";
+            filePath = Helper.assetFolderPath+"\\BaseImage.PNG";
             if (shapepointer == 0)
             {
-
                 return new Bitmap(filePath);
             }
             else
