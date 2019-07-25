@@ -22,7 +22,7 @@ namespace SGS_DEPLOYMENTPROJECT
                 var  PortName = ConfigurationManager.AppSettings.Get("portName");
                 PortName = "COM5";
                 mySerialPort = new SerialPort(PortName);
-                mySerialPort.BaudRate = 9600;
+                mySerialPort.BaudRate = 115200;
                 mySerialPort.Parity = Parity.None;
                 mySerialPort.StopBits = StopBits.One;
                 mySerialPort.DataBits = 8;

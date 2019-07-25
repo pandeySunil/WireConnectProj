@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArdiunoAdapter.cs" />
     <Compile Include="ArdiunoConnection.cs" />
     <Compile Include="BusinessLogic.cs" />
     <Compile Include="FileSelect.cs">

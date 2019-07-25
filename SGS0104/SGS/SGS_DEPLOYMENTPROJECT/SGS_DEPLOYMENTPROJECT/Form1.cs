@@ -17,7 +17,9 @@ namespace SGS_DEPLOYMENTPROJECT
 {
     public partial class Form1 : Form
     {
+        public ArdiunoAdapter ardiunoAdapter { get; set; }
         public int ImagIndex { get; set; }
+        public bool useArdiuno = true;
         public bool backgroudThreadSleepFlag;
         public bool imageBlickFalg = true;
         BusinessLogic businessLogic { get; set; }
@@ -91,6 +93,9 @@ namespace SGS_DEPLOYMENTPROJECT
                // ImageLoadThread.Start();
             }
             Console.WriteLine("Sytem Running in Dev mode----");
+            if (useArdiuno) {
+                ardiunoAdapter = new ArdiunoAdapter(useArdiuno);
+            }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -185,6 +190,9 @@ namespace SGS_DEPLOYMENTPROJECT
                     trayCode = "000" + trayCode + "00" + temp1;
                     Console.WriteLine("trayCode");
                     Console.WriteLine(trayCode);
+                    if (useArdiuno) {
+                        ardiunoAdapter.Send(trayCode);
+                    }
                     string temp2 = xlRange.Cells[i, 5].Value2.ToString().Trim('/');
                     string temp3 = xlRange.Cells[i, 6].Value2.ToString().Trim('/');
                     Console.WriteLine("Description Message");
@@ -277,6 +285,7 @@ namespace SGS_DEPLOYMENTPROJECT
         }
         public  string SwitchPress(int imageId)
         {
+            var readText = "";
             bool Flag = true;
           bool   toggleFlag = true;
             var originalImage = (Image)ImageGetter.GetBitmap(0);
@@ -297,9 +306,15 @@ namespace SGS_DEPLOYMENTPROJECT
                 //    toggleFlag = true;
                 //}
                 //Thread.Sleep(250);
-            
-                var readText = Console.ReadLine();
+                if (useArdiuno)
+                {
+                    readText = ardiunoAdapter.Receive();
 
+                }
+                else
+                {
+                    readText = Console.ReadLine();
+                }
                 //var readText = SerialPort.ReadLine();
 
 
