@@ -17,6 +17,7 @@ namespace SGS_DEPLOYMENTPROJECT
 {
     public partial class Form1 : Form
     {
+        public int ImagIndex { get; set; }
         public bool backgroudThreadSleepFlag;
         public bool imageBlickFalg = true;
         BusinessLogic businessLogic { get; set; }
@@ -73,8 +74,7 @@ namespace SGS_DEPLOYMENTPROJECT
             if (Helper.assetFolderPath ==null|| Helper.assetFolderPath == "") {
                 SetFolderPath();
             }
-           var  ImageLoadThread = new Thread(() => LoadImage());
-            ImageLoadThread.IsBackground = true;
+          
             BackGroundThread = new Thread(() => Navigation());
             BackGroundThread.IsBackground = true;
             //SerialPort = ArdiunoConnection.IntializeAudiun();
@@ -90,7 +90,7 @@ namespace SGS_DEPLOYMENTPROJECT
             {
                // ImageLoadThread.Start();
             }
-            
+            Console.WriteLine("Sytem Running in Dev mode----");
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -150,6 +150,10 @@ namespace SGS_DEPLOYMENTPROJECT
         }
         private void Navigation()
         {
+            var ImageLoadThread = new Thread(() => LoadImage(0));
+            ImageLoadThread.IsBackground = true;
+           
+            ImageGetter = new ImageGetter();
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
@@ -166,38 +170,47 @@ namespace SGS_DEPLOYMENTPROJECT
            // textBoxDevelopersArea.Text += "Sheet Intiallized\\n";
 
             int Count = 1;
-
+            ImageLoadThread.Start();
             for (int i = 2; i < 20; i++)
             {
                // textBoxDevelopersArea.Text += "Next Iteration \\n";
                 Console.WriteLine(Count);
+                Console.WriteLine("Started----");
                 if (xlRange.Cells[i, 2] != null && xlRange.Cells[i, 2].Value2 != null)
                 {
 
                     trayCode = xlRange.Cells[i, 2].Value2.ToString().Trim('/');
+                    
                     string temp1 = xlRange.Cells[i, 3].Value2.ToString().Trim('/');
+                    trayCode = "000" + trayCode + "00" + temp1;
+                    Console.WriteLine("trayCode");
+                    Console.WriteLine(trayCode);
                     string temp2 = xlRange.Cells[i, 5].Value2.ToString().Trim('/');
-                    Console.WriteLine("Celli,5" + temp2);
+                    string temp3 = xlRange.Cells[i, 6].Value2.ToString().Trim('/');
+                    Console.WriteLine("Description Message");
+                    var descMessage = "Take Wire From " + temp2 + " put it into connecter NO." + temp3;
+                    Console.WriteLine(descMessage);
+                    ImagIndex = Convert.ToInt32(xlRange.Cells[i, 7].Value2.ToString().Trim('/'));
                     ledOnCode = trayCode + temp1;
                     ledOffCode = trayCode + temp2;
                     //switchCode = xlRange.Cells[i, 4].Value2.ToString().Trim('/');\
                     switchCode = "SW1";
-                    Console.WriteLine("SwitchCode-Sheet: " + switchCode);
+                   // Console.WriteLine("SwitchCode-Sheet: " + switchCode);
                     //SerialPort.Write(ledOnCode);
-                    sWInput = SwitchPress();
-                   // textBoxDevelopersArea.Text += "SwitchCode - Ardiuno: " + sWInput + "\\n";
-                    Console.WriteLine("SwitchCode-Ardiuno: " + sWInput);
+                    sWInput = SwitchPress(Convert.ToInt32(xlRange.Cells[i, 7].Value2.ToString().Trim('/')));
+                    // textBoxDevelopersArea.Text += "SwitchCode - Ardiuno: " + sWInput + "\\n";
+                    //Console.WriteLine("SwitchCode-Ardiuno: " + sWInput);
                     //textBoxDevelopersArea.Text += "SwitchCode - Ardiuno: " + sWInput + "\\n";
-                    Console.WriteLine(ledOnCode);
-
+                    //Console.WriteLine(ledOnCode);
+                    textBoxDescription.Text = descMessage;
                     var t = switchCode + "\r";
-
+                    
                     var falg = string.Equals(sWInput, t, StringComparison.OrdinalIgnoreCase);
                     if (falg)
                     {
                         //SerialPort.Write(ledOffCode);
                         switchCode = xlRange.Cells[i, 6].Value2.ToString().Trim('/');
-                        sWInput = SwitchPress();
+                        sWInput = SwitchPress(Convert.ToInt32(xlRange.Cells[i, 7].Value2.ToString().Trim('/')));
                         t = switchCode + "\r";
                         falg = string.Equals(sWInput, t, StringComparison.OrdinalIgnoreCase);
                         if (falg)
@@ -206,14 +219,16 @@ namespace SGS_DEPLOYMENTPROJECT
                             temp2 = xlRange.Cells[i, 5].Value2.ToString().Trim('/');
                             ledOnCode = trayCode + temp1;
                             // textBoxDevelopersArea.Text += "ledOnCode: " + ledOnCode + "\\n";
-                            Console.WriteLine(ledOnCode);
-                            SerialPort.Write(ledOnCode);
-                            textBoxDescription.Text = xlRange.Cells[i, 7].Value2.ToString().Trim('/');
+                            //Console.WriteLine(ledOnCode);
+                            //SerialPort.Write(ledOnCode);
+
+                            textBoxDescription.Text = descMessage;
+                           ImagIndex = Convert.ToInt32(xlRange.Cells[i, 7].Value2.ToString().Trim('/'));
                             // textBoxDevelopersArea.Text += "DesMag: " + xlRange.Cells[i, 7].Value2.ToString().Trim('/') + "\\n";
                             textBoxPullConnection.Text = xlRange.Cells[i, 8].Value2.ToString().Trim('/');
 
                             imgUrl = xlRange.Cells[i, 9].Value2.ToString().Trim('/');
-                          //  Bitmap image = new Bitmap("C:\\Users\\Akshay\\Desktop\\SGS\\SGS_MEDIA\\" + imgUrl);
+                            //  Bitmap image = new Bitmap("C:\\Users\\Akshay\\Desktop\\SGS\\SGS_MEDIA\\" + imgUrl);
                            // pictureBox.Image = (Image)image;
                             //var originalImage = (Image)ImageGetter.GetBitmap(0);
                             //var modifiedImage = (Image)ImageGetter.GetBitmap(1);
@@ -260,12 +275,29 @@ namespace SGS_DEPLOYMENTPROJECT
 
 
         }
-        public static string SwitchPress()
+        public  string SwitchPress(int imageId)
         {
             bool Flag = true;
+          bool   toggleFlag = true;
+            var originalImage = (Image)ImageGetter.GetBitmap(0);
+            var modifiedImage = (Image)ImageGetter.GetBitmap(imageId);
             while (Flag)
             {
+                //if (toggleFlag)
+                //{
 
+                //    pictureBox.Image = originalImage;
+                //    toggleFlag = false;
+
+                //}
+                //else
+                //{
+
+                //    pictureBox.Image = modifiedImage;
+                //    toggleFlag = true;
+                //}
+                //Thread.Sleep(250);
+            
                 var readText = Console.ReadLine();
 
                 //var readText = SerialPort.ReadLine();
@@ -409,27 +441,33 @@ namespace SGS_DEPLOYMENTPROJECT
                 }
             }
 
-            MessageBox.Show(Helper.assetFolderPath);
+          
 
         }
-        public void LoadImage() {
-
+        public void LoadImage(int imageId) {
+            if (ImageGetter == null) {
+                ImageGetter = new ImageGetter();
+            }
             var originalImage = (Image)ImageGetter.GetBitmap(0);
-            var modifiedImage = (Image)ImageGetter.GetBitmap(1);
+            var modifiedImage = (Image)ImageGetter.GetBitmap(ImagIndex);
+            var preImgIndex = ImagIndex;
             bool toggleFlag = false;
-            var imageId = 1;
+            //var imageId = 1;
             while (imageBlickFalg)
             {
+                if (preImgIndex != ImagIndex) {
+                    modifiedImage = (Image)ImageGetter.GetBitmap(ImagIndex);
+                }
                 if (toggleFlag)
                 {
-                  
+
                     pictureBox.Image = originalImage;
                     toggleFlag = false;
-                    
+
                 }
                 else
                 {
-                  
+
                     pictureBox.Image = modifiedImage;
                     toggleFlag = true;
                 }
